@@ -1,0 +1,1858 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Projects devoted to USB input device emulation and game peripherals reverse engineering">
+      
+      
+      
+      
+        <link rel="canonical" href="https://vigem.org/projects/DsHidMini/DS4-Mode-User-Guide/">
+      
+      <link rel="icon" href="../../../images/favicon.png">
+      <meta name="generator" content="mkdocs-1.2.1, mkdocs-material-7.1.9">
+    
+    
+      
+        <title>DS4Windows Mode User Guide - Virtual Gamepad Emulation Framework</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.ca7ac06f.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.f1a3b89f.min.css">
+        
+          
+          
+          <meta name="theme-color" content="#009485">
+        
+      
+    
+    
+    
+      
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <style>:root{--md-text-font-family:"Roboto";--md-code-font-family:"Roboto Mono"}</style>
+      
+    
+    
+    
+      <link rel="stylesheet" href="../../../stylesheets/glightbox.css">
+    
+    
+  <script>if(!sessionStorage.getItem("_swa")&&document.referrer.indexOf(location.protocol+"//"+location.host)!== 0){fetch("https://counter.dev/track?"+new URLSearchParams({referrer:document.referrer,screen:screen.width+"x"+screen.height,user:"Nefarius",utcoffset:"1"}))};sessionStorage.setItem("_swa","1");</script>
+
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="" data-md-color-primary="teal" data-md-color-accent="">
+  
+    
+    <script>function __prefix(e){return new URL("../../..",location).pathname+"."+e}function __get(e,t=localStorage){return JSON.parse(t.getItem(__prefix(e)))}</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#ds4windows-mode-user-guide" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="Virtual Gamepad Emulation Framework" class="md-header__button md-logo" aria-label="Virtual Gamepad Emulation Framework" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Virtual Gamepad Emulation Framework
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              DS4Windows Mode User Guide
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+      </label>
+      
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" data-md-state="active" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </label>
+      <button type="reset" class="md-search__icon md-icon" aria-label="Clear" tabindex="-1">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        
+<a href="https://github.com/ViGEm/ViGEm.github.io/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-tabs__inner md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="../../.." class="md-tabs__link">
+      Welcome
+    </a>
+  </li>
+
+      
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="../../../Community-Support/" class="md-tabs__link">
+      Community and Support
+    </a>
+  </li>
+
+      
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="../../../Donations/" class="md-tabs__link">
+      Donations
+    </a>
+  </li>
+
+      
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="../../../Downloads/" class="md-tabs__link">
+      Downloads
+    </a>
+  </li>
+
+      
+        
+  
+  
+    
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../" class="md-tabs__link md-tabs__link--active">
+        Projects
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../research/" class="md-tabs__link">
+        Research
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="Virtual Gamepad Emulation Framework" class="md-nav__button md-logo" aria-label="Virtual Gamepad Emulation Framework" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+
+    </a>
+    Virtual Gamepad Emulation Framework
+  </label>
+  
+    <div class="md-nav__source">
+      
+<a href="https://github.com/ViGEm/ViGEm.github.io/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        Welcome
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../Community-Support/" class="md-nav__link">
+        Community and Support
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../Donations/" class="md-nav__link">
+        Donations
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../Downloads/" class="md-nav__link">
+        Downloads
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5" type="checkbox" id="__nav_5" checked>
+      
+      <label class="md-nav__link" for="__nav_5">
+        Projects
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Projects" data-md-level="1">
+        <label class="md-nav__title" for="__nav_5">
+          <span class="md-nav__icon md-icon"></span>
+          Projects
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../" class="md-nav__link">
+        About Projects
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_2" type="checkbox" id="__nav_5_2" >
+      
+      <label class="md-nav__link" for="__nav_5_2">
+        AirBender
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="AirBender" data-md-level="2">
+        <label class="md-nav__title" for="__nav_5_2">
+          <span class="md-nav__icon md-icon"></span>
+          AirBender
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../AirBender/" class="md-nav__link">
+        About AirBender
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../AirBender/Removal-Guide/" class="md-nav__link">
+        AirBender Removal Guide
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_3" type="checkbox" id="__nav_5_3" >
+      
+      <label class="md-nav__link" for="__nav_5_3">
+        BthPS3
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="BthPS3" data-md-level="2">
+        <label class="md-nav__title" for="__nav_5_3">
+          <span class="md-nav__icon md-icon"></span>
+          BthPS3
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../BthPS3/" class="md-nav__link">
+        About BthPS3
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../BthPS3/API-Documentation/" class="md-nav__link">
+        API Documentation
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../BthPS3/About-Controller-Compatibility/" class="md-nav__link">
+        A word about controller compatibility
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../BthPS3/Amazon-Choice-Pro-Controller/" class="md-nav__link">
+        Amazon's Choice "Pro Controller" Compatibility
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../BthPS3/Compatible-Bluetooth-Devices/" class="md-nav__link">
+        Compatible Bluetooth Devices
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../BthPS3/Debugging-the-drivers/" class="md-nav__link">
+        Getting a kernel driver to talk
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../BthPS3/Driver-Configuration-Utility-Explained/" class="md-nav__link">
+        Driver Configuration Utility Explained
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../BthPS3/DualShock-4-FAQ/" class="md-nav__link">
+        Frequently Asked Questions about the DS4
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../BthPS3/Frequently-Asked-Questions/" class="md-nav__link">
+        Frequently Asked Questions about BthPS3
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../BthPS3/Installation-Guide-Shibari-Edition/" class="md-nav__link">
+        Installation Guide (Shibari Edition)
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
+            
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_4" type="checkbox" id="__nav_5_4" checked>
+      
+      <label class="md-nav__link" for="__nav_5_4">
+        DsHidMini
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="DsHidMini" data-md-level="2">
+        <label class="md-nav__title" for="__nav_5_4">
+          <span class="md-nav__icon md-icon"></span>
+          DsHidMini
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../" class="md-nav__link">
+        About DsHidMini
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          DS4Windows Mode User Guide
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        DS4Windows Mode User Guide
+      </a>
+      
+        
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#what-does-work" class="md-nav__link">
+    What does work
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-does-not-work" class="md-nav__link">
+    What does not work
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#using-the-controller-with-ds4windows" class="md-nav__link">
+    Using the controller with DS4Windows
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-now" class="md-nav__link">
+    What now?
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#light-bar-color-to-leds-translation" class="md-nav__link">
+    Light Bar color to LEDs translation
+  </a>
+  
+    <nav class="md-nav" aria-label="Light Bar color to LEDs translation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#simple-led-control" class="md-nav__link">
+    Simple LED control
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#complete-led-control" class="md-nav__link">
+    Complete LED control
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#frequently-asked-questions" class="md-nav__link">
+    Frequently Asked Questions
+  </a>
+  
+    <nav class="md-nav" aria-label="Frequently Asked Questions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#how-do-i-change-between-xinput-and-ds4-emulation" class="md-nav__link">
+    How do I change between XInput and DS4 emulation?
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#select-button-is-not-recognized-in-some-games-when-emulating-a-ds4-how-do-i-use-the-touch-pad-button" class="md-nav__link">
+    Select button is not recognized in some games when emulating a DS4 / How do I use the Touch Pad button?
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#i-cant-control-steams-big-picture-when-using-a-emulated-ds4-steam-doesnt-detect-my-controller-when-its-emulated-as-a-ds4-only-when-emulated-as-a-xbox-360" class="md-nav__link">
+    I can't control Steam's Big Picture when using a emulated DS4 / Steam doesn't detect my controller when it's emulated as a DS4, only when emulated as a Xbox 360
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#x-game-does-not-detect-my-emulated-ds4-my-game-is-not-showing-ps-button-icons" class="md-nav__link">
+    'X' game does not detect my emulated DS4 / my game is not showing PS button icons
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#how-do-i-do-x-thing-on-ds4windows" class="md-nav__link">
+    How do I do 'X' thing on DS4Windows
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../FAQ/" class="md-nav__link">
+        Frequently Asked Questions
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../HID-Device-Modes-Explained/" class="md-nav__link">
+        HID Device Modes Explained
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../How-to-Install/" class="md-nav__link">
+        How to Install/Remove
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Output-Rate-Control-Explained/" class="md-nav__link">
+        Output Rate Control Explained
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Roadmap/" class="md-nav__link">
+        Roadmap
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../SIXAXIS.SYS-to-DsHidMini-Guide/" class="md-nav__link">
+        Switch from SIXAXIS.SYS to DsHidMini
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_5" type="checkbox" id="__nav_5_5" >
+      
+      <label class="md-nav__link" for="__nav_5_5">
+        FireShock
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="FireShock" data-md-level="2">
+        <label class="md-nav__title" for="__nav_5_5">
+          <span class="md-nav__icon md-icon"></span>
+          FireShock
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../FireShock/" class="md-nav__link">
+        About FireShock
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_6" type="checkbox" id="__nav_5_6" >
+      
+      <label class="md-nav__link" for="__nav_5_6">
+        HidGuardian
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="HidGuardian" data-md-level="2">
+        <label class="md-nav__title" for="__nav_5_6">
+          <span class="md-nav__icon md-icon"></span>
+          HidGuardian
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../HidGuardian/" class="md-nav__link">
+        About HidGuardian
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../HidGuardian/Hall-of-fame/" class="md-nav__link">
+        Users of HidGuardian
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../HidGuardian/Taming-HidGuardian-Gen1/" class="md-nav__link">
+        Taming HidGuardian (Gen1)
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_7" type="checkbox" id="__nav_5_7" >
+      
+      <label class="md-nav__link" for="__nav_5_7">
+        HidHide
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="HidHide" data-md-level="2">
+        <label class="md-nav__title" for="__nav_5_7">
+          <span class="md-nav__icon md-icon"></span>
+          HidHide
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../HidHide/" class="md-nav__link">
+        About HidHide
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../HidHide/API-Documentation/" class="md-nav__link">
+        API Documentation
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../HidHide/Simple-Setup-Guide/" class="md-nav__link">
+        Simple setup guide
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_8" type="checkbox" id="__nav_5_8" >
+      
+      <label class="md-nav__link" for="__nav_5_8">
+        ScpToolkit
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="ScpToolkit" data-md-level="2">
+        <label class="md-nav__title" for="__nav_5_8">
+          <span class="md-nav__icon md-icon"></span>
+          ScpToolkit
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ScpToolkit/" class="md-nav__link">
+        About ScpToolkit
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ScpToolkit/History/" class="md-nav__link">
+        History of SCP
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ScpToolkit/ScpToolkit-Removal-Guide/" class="md-nav__link">
+        Manual removal of ScpToolkit residue
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_9" type="checkbox" id="__nav_5_9" >
+      
+      <label class="md-nav__link" for="__nav_5_9">
+        Shibari
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Shibari" data-md-level="2">
+        <label class="md-nav__title" for="__nav_5_9">
+          <span class="md-nav__icon md-icon"></span>
+          Shibari
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Shibari/" class="md-nav__link">
+        About Shibari
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_10" type="checkbox" id="__nav_5_10" >
+      
+      <label class="md-nav__link" for="__nav_5_10">
+        ViGEm
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="ViGEm" data-md-level="2">
+        <label class="md-nav__title" for="__nav_5_10">
+          <span class="md-nav__icon md-icon"></span>
+          ViGEm
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ViGEm/" class="md-nav__link">
+        About ViGEm
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ViGEm/How-to-Install/" class="md-nav__link">
+        How to Install/Remove
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_11" type="checkbox" id="__nav_5_11" >
+      
+      <label class="md-nav__link" for="__nav_5_11">
+        WireShock
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="WireShock" data-md-level="2">
+        <label class="md-nav__title" for="__nav_5_11">
+          <span class="md-nav__icon md-icon"></span>
+          WireShock
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../WireShock/" class="md-nav__link">
+        About WireShock
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_6" type="checkbox" id="__nav_6" >
+      
+      <label class="md-nav__link" for="__nav_6">
+        Research
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Research" data-md-level="1">
+        <label class="md-nav__title" for="__nav_6">
+          <span class="md-nav__icon md-icon"></span>
+          Research
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../research/" class="md-nav__link">
+        Research area
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../research/CORSAIR-GLAIVE-RGB-native-HID-Report-Descriptor/" class="md-nav__link">
+        CORSAIR GLAIVE RGB native HID Report Descriptor
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../research/How-to-check-architecture/" class="md-nav__link">
+        How to check which architecture I'm running
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../research/SIXAXIS-native-HID-Report-Descriptor/" class="md-nav__link">
+        SIXAXIS/DualShock 3 native HID Report Descriptor
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../research/vJoy-HID-Report-Descriptor/" class="md-nav__link">
+        vJoy HID Report Descriptor
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#what-does-work" class="md-nav__link">
+    What does work
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-does-not-work" class="md-nav__link">
+    What does not work
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#using-the-controller-with-ds4windows" class="md-nav__link">
+    Using the controller with DS4Windows
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-now" class="md-nav__link">
+    What now?
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#light-bar-color-to-leds-translation" class="md-nav__link">
+    Light Bar color to LEDs translation
+  </a>
+  
+    <nav class="md-nav" aria-label="Light Bar color to LEDs translation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#simple-led-control" class="md-nav__link">
+    Simple LED control
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#complete-led-control" class="md-nav__link">
+    Complete LED control
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#frequently-asked-questions" class="md-nav__link">
+    Frequently Asked Questions
+  </a>
+  
+    <nav class="md-nav" aria-label="Frequently Asked Questions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#how-do-i-change-between-xinput-and-ds4-emulation" class="md-nav__link">
+    How do I change between XInput and DS4 emulation?
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#select-button-is-not-recognized-in-some-games-when-emulating-a-ds4-how-do-i-use-the-touch-pad-button" class="md-nav__link">
+    Select button is not recognized in some games when emulating a DS4 / How do I use the Touch Pad button?
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#i-cant-control-steams-big-picture-when-using-a-emulated-ds4-steam-doesnt-detect-my-controller-when-its-emulated-as-a-ds4-only-when-emulated-as-a-xbox-360" class="md-nav__link">
+    I can't control Steam's Big Picture when using a emulated DS4 / Steam doesn't detect my controller when it's emulated as a DS4, only when emulated as a Xbox 360
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#x-game-does-not-detect-my-emulated-ds4-my-game-is-not-showing-ps-button-icons" class="md-nav__link">
+    'X' game does not detect my emulated DS4 / my game is not showing PS button icons
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#how-do-i-do-x-thing-on-ds4windows" class="md-nav__link">
+    How do I do 'X' thing on DS4Windows
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content" data-md-component="content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                  <a href="https://github.com/ViGEm/ViGEm.github.io/edit/master/docs/projects/DsHidMini/DS4-Mode-User-Guide.md" title="Edit this page" class="md-content__button md-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25z"/></svg>
+                  </a>
+                
+                
+                <h1 id="ds4windows-mode-user-guide">DS4Windows Mode User Guide</h1>
+<div class="admonition important">
+<p class="admonition-title">Jays2Kings' DS4Windows <strong>IS NOT SUPPORTED</strong>!</p>
+<p>If you just search "DS4Windows" on Google/Bing/whatever the first result will probably be the obsolete Jays2Kings' version</p>
+</div>
+<p>In <code>DS4Windows</code> HID Device Mode, the controller appears as a custom device that can only be detected by <a href="https://github.com/Ryochan7/DS4Windows">Ryochan7's DS4Windows</a>, allowing the user to then emulate a DualShock 4 or Xbox 360 (<strong>XInput</strong>) controller as well as make use of most of its features.</p>
+<h2 id="what-does-work">What does work</h2>
+<ul>
+<li>Xbox 360 (<strong>XInput</strong>) / DualShock 4 emulation according to the selected profile settings in DS4Windows</li>
+<li>Rumble works as normal</li>
+<li>DS4's Touchpad Button can be used by remapping a button to it (e.g.: use Select as the <em>TP button</em> instead of <em>Share</em>)</li>
+<li>DS3's LEDs can be controlled by setting the correct Light Bar colors (more on that on a later section)</li>
+<li>DS4Windows's <code>Flash Lightbar at High Latency</code> function makes the LEDs flash accordingly</li>
+<li>Basically every other DS4Windows function that is not related to the Light Bar or motion works as intended</li>
+</ul>
+<h2 id="what-does-not-work">What does not work</h2>
+<ul>
+<li>DS3 controllers are always recognized as if they were connected by USB. As such, DS4Windows Bluetooth functions like auto-disconnect on idle and disconnect on button combo are not supported. This is a limitation on DsHidMini side and can't be fixed by DS4Windows. <a href="https://github.com/ViGEm/DsHidMini#features">The built-in equivalent functions of DsHidMini</a> should be used instead</li>
+<li>Motion/UDP server is not supported and will remain so until someone manages to translate the motion info from the DS3 to the DS4 motion standard</li>
+<li>Settings that make the Light Bar color flash, pulse or change randomly (rainbow mode) are not supported</li>
+<li>Specific DS4 touchpad movements are not supported, only the Touchpad Button (another button needs to be remapped to it)</li>
+</ul>
+<h2 id="using-the-controller-with-ds4windows">Using the controller with DS4Windows</h2>
+<ul>
+<li>To start, <a href="../HID-Device-Modes-Explained">the controller must be in <code>DS4Windows</code> mode</a></li>
+<li>Download the latest <a href="https://github.com/Ryochan7/DS4Windows/releases">Ryochan7's DS4Windows</a> release package according to your <a href="https://www.howtogeek.com/howto/21726/how-do-i-know-if-im-running-32-bit-or-64-bit-windows-answers/">Windows 10 version</a></li>
+<li>Extract the package to an easily accessible folder</li>
+<li>Run DS4Windows.exe</li>
+<li>Install the ViGEmBus Driver if asked to</li>
+</ul>
+<p>After that, the controller should be properly recognized by DS4Windows. If it's not, verify again if it is in "<a href="../HID-Device-Modes-Explained">DS4Windows mode</a>".</p>
+<p><img alt="DS4ModeDS4W" class="glightbox" src="../images/DS4ModeDS4W.png" /></p>
+<h2 id="what-now">What now?</h2>
+<p>From here, DS4Windows can be used <em>mostly</em> as usual. XInput and DS4 emulation, as well other functions, can then be set-up in the profiles settings according to the user needs. Besides that:</p>
+<ul>
+<li>Keep in mind: <code>Select</code> and <code>Start</code> buttons are recognized as the <code>Share</code> and <code>Options</code> buttons in DS4Windows<br />
+<img alt="DS3toDS4ButtonLayout" class="glightbox" src="../images/DS3toDS4ButtonLayout.png" /></li>
+<li>In case you need, there are more detailed instructions on <a href="#how-do-i-change-between-xinput-and-ds4-emulation">how to change to DS4 emulation</a></li>
+<li>If you want your controller's LEDs to represent the current battery level, see <a href="#simple-led-control">Simple Led Control -&gt; Example 2</a></li>
+<li>If you want the current selected profile to be represented by a specific LED or LED combination on the controller, read the <a href="#light-bar-color-to-leds-translation">Light Bar to LEDs translation section</a> </li>
+<li>It's recommended you have a quick look at the <a href="#frequently-asked-questions"><em>DS4Windows Frequently Asked Questions</em></a> section, read at least the title of the topics</li>
+</ul>
+<h2 id="light-bar-color-to-leds-translation">Light Bar color to LEDs translation</h2>
+<div class="admonition note">
+<p class="admonition-title">Optional section</p>
+<p>Read this section if you want to control your controller's LEDs to show the current battery or selected profile</p>
+</div>
+<p>By setting the correct Light Bar color values in the profile settings it is possible to control the LEDs on the DS3, which can be useful to:</p>
+<ul>
+<li>Make the controller's LEDs represent the current battery level </li>
+<li>Represent the current selected profile as a specific LED</li>
+<li>Indicate the battery level by using <em>Special Actions</em> in the profile's settings</li>
+</ul>
+<p>Beware that functions in DS4Windows that make the Light Bar flash, pulse or randomize the colors (<code>rainbow mode</code>) are not supported and can make the LEDs change to an undesired state, though the <code>Flash Light Bar at High Latency</code> function do is supported and will make the LEDs flash at a high frequency.</p>
+<h3 id="simple-led-control">Simple LED control</h3>
+<ul>
+<li>Simple to set-up</li>
+<li>Good to represent which profile is active (see example 1)</li>
+<li>Necessary when making DS4Windows show the controller's battery level and for battery related <code>Special Actions</code> (see examples 2 and 3 respectively)</li>
+</ul>
+<p>When this form of translation is active, the <code>Red color value</code> will be translated to the LEDs state according to the following table:</p>
+<table>
+<thead>
+<tr>
+<th align="center">RED value (Dec)</th>
+<th align="center">LED state</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">0 - 64</td>
+<td align="center">Blinking LED 1</td>
+</tr>
+<tr>
+<td align="center">65 - 94</td>
+<td align="center">LED 1</td>
+</tr>
+<tr>
+<td align="center">95 - 148</td>
+<td align="center">LED 2</td>
+</tr>
+<tr>
+<td align="center">149 - 201</td>
+<td align="center">LED 3</td>
+</tr>
+<tr>
+<td align="center">202 - 255</td>
+<td align="center">LED 4</td>
+</tr>
+</tbody>
+</table>
+<p><strong>FORMS OF ACTIVATION:</strong></p>
+<table>
+<thead>
+<tr>
+<th align="center">Simple LED control mode</th>
+<th align="center">How to activate</th>
+<th align="center">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center"><strong>Single mode</strong></td>
+<td align="center">Green and Blue = 0</td>
+<td align="center">Only the chosen LED is ON</td>
+</tr>
+<tr>
+<td align="center"><strong>Filling Mode</strong></td>
+<td align="center">Green = 0, Blue = 255</td>
+<td align="center">The chosen LED and the ones before it are ON</td>
+</tr>
+</tbody>
+</table>
+<p><strong>e.g. 1:</strong> Setting up a profile to be represented as LED 3 only (<strong>single mode</strong>).</p>
+<p><img alt="SimpleLedControl eg 1 - LED 3 on" class="glightbox" src="../images/SimpleLedControl_eg1_LED3on.png" /></p>
+<p><strong>e.g. 2:</strong> Setting up a profile to reflect the controller's battery level.</p>
+<p><img alt="SimpleLedControl eg 2 - Battery charge indication" class="glightbox" src="../images/SimpleLedControl_eg2_Battery.png" /></p>
+<p><strong>e.g. 3:</strong> Setting up a <em>Special Action</em> to make the LEDs reflect the controller's battery level.</p>
+<p><img alt="SimpleLedControl eg 3 - Macro example" class="glightbox" src="../images/SimpleLedControl_eg3_Macro.png" /></p>
+<h3 id="complete-led-control">Complete LED control</h3>
+<ul>
+<li>"Harder" to set-up (not really)</li>
+<li>Allows any combination of LEDs on</li>
+<li>Useful if the user wants to differentiate between more than 4 profiles</li>
+</ul>
+<p><strong>HOW TO ACTIVATE:</strong> Green and Blue = 255</p>
+<p>When this form of translation is active, the Red color value from 0 to 15 will be translated to the LEDs state according to the following table:</p>
+<table>
+<thead>
+<tr>
+<th align="center">LED 4</th>
+<th align="center">LED 3</th>
+<th align="center">LED 2</th>
+<th align="center">LED 1</th>
+<th align="center">RED value (Dec)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center">0</td>
+</tr>
+<tr>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center">ON</td>
+<td align="center">1</td>
+</tr>
+<tr>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center">ON</td>
+<td align="center"></td>
+<td align="center">2</td>
+</tr>
+<tr>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center">ON</td>
+<td align="center">ON</td>
+<td align="center">3</td>
+</tr>
+<tr>
+<td align="center"></td>
+<td align="center">ON</td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center">4</td>
+</tr>
+<tr>
+<td align="center"></td>
+<td align="center">ON</td>
+<td align="center"></td>
+<td align="center">ON</td>
+<td align="center">5</td>
+</tr>
+<tr>
+<td align="center"></td>
+<td align="center">ON</td>
+<td align="center">ON</td>
+<td align="center"></td>
+<td align="center">6</td>
+</tr>
+<tr>
+<td align="center"></td>
+<td align="center">ON</td>
+<td align="center">ON</td>
+<td align="center">ON</td>
+<td align="center">7</td>
+</tr>
+<tr>
+<td align="center">ON</td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center">8</td>
+</tr>
+<tr>
+<td align="center">ON</td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center">ON</td>
+<td align="center">9</td>
+</tr>
+<tr>
+<td align="center">ON</td>
+<td align="center"></td>
+<td align="center">ON</td>
+<td align="center"></td>
+<td align="center">10</td>
+</tr>
+<tr>
+<td align="center">ON</td>
+<td align="center"></td>
+<td align="center">ON</td>
+<td align="center">ON</td>
+<td align="center">11</td>
+</tr>
+<tr>
+<td align="center">ON</td>
+<td align="center">ON</td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center">12</td>
+</tr>
+<tr>
+<td align="center">ON</td>
+<td align="center">ON</td>
+<td align="center"></td>
+<td align="center">ON</td>
+<td align="center">13</td>
+</tr>
+<tr>
+<td align="center">ON</td>
+<td align="center">ON</td>
+<td align="center">ON</td>
+<td align="center"></td>
+<td align="center">14</td>
+</tr>
+<tr>
+<td align="center">ON</td>
+<td align="center">ON</td>
+<td align="center">ON</td>
+<td align="center">ON</td>
+<td align="center">15</td>
+</tr>
+</tbody>
+</table>
+<p><strong>e.g.:</strong> Setting up a profile to be represented as LEDs 4 and 2.</p>
+<p><img alt="TotalLedControl eg - LEDs 4 and 2" class="glightbox" src="../images/TotalLedControl_eg_LEDs_4_2.png" /></p>
+<h2 id="frequently-asked-questions">Frequently Asked Questions</h2>
+<h3 id="how-do-i-change-between-xinput-and-ds4-emulation"><em>How do I change between XInput and DS4 emulation?</em></h3>
+<p>The controller that DS4Windows emulates is dependent on the current selected profile. By default, the profile that comes with DS4Windows called... <em>Default</em>... is set to emulate a Xbox 360 controller. You can create new profiles with different settings to best fit your use case, though this section will focus solely on creating a profile with DS4 emulation:</p>
+<ul>
+<li>Go to the <em>Profiles</em> tab</li>
+<li>Click on the "New" button to create a new profile</li>
+<li>When asked if a preset is to be used, choose "yes"</li>
+<li>Select <code>Gamepad</code> and then <code>DualShock 4</code> at the Output Controller</li>
+<li>Adjust the Light Bar color to what you desire acordingly to the <a href="#light-bar-color-to-leds-translation"><em>Light Bar to LEDs translation</em> section</a> (in the example below the profile will be represented by LED 2)</li>
+<li>Give a name to your profile (e.g.: DS3 to DS4)</li>
+<li>Save the profile</li>
+<li>Back in the <em>Controllers</em> tab, click on the <em>Selected profile</em> box and change from default to the profile you just created<br />
+<img alt="Ds4Profile" class="glightbox" src="../images/Ds4Profile.png" /></li>
+</ul>
+<p>And done, now you can switch between XInput/DS4 emulation by changing between profiles.</p>
+<p>Keep in mind that some games that support DS4 controllers use the <code>Touch Pad</code> for options/to open the map/etc. In this case, you'll need to <a href="#select-button-is-not-recognized-in-some-games-when-emulating-a-ds4-how-do-i-use-the-touch-pad-button">remap a button as the <code>Touch Pad</code> button</a> on a new profile to use it.</p>
+<h3 id="select-button-is-not-recognized-in-some-games-when-emulating-a-ds4-how-do-i-use-the-touch-pad-button"><em>Select button is not recognized in some games when emulating a DS4 / How do I use the Touch Pad button?</em></h3>
+<p>A DS3 controller has 13 buttons while a real DS4 controller has 14, this extra button being the <code>Touch Pad</code> button which can't be mapped directly to the DS3 by DsHidMini.</p>
+<p>Some games that support DS4 controllers use the <code>Touch Pad</code> for options, opening the map, etc. To work around this, the user needs to remap an existing button to the <code>TP</code> one. </p>
+<p>Usually, games that use the <code>TP</code> button don't use the <code>Share</code> button (the default <code>Select</code>), so the usual bet is to remap it to the <code>TP</code>, though any other one can be chosen. So, after creating a profile with <code>DS4</code> emulation:</p>
+<ul>
+<li>Duplicate your DS4 profile, choose a different name to it</li>
+<li>Edit the new profile</li>
+<li>On the left side, in the DualShock 4 picture, click on the button you want to remap</li>
+<li>On the new window that appears, select the middle of the Touch Pad</li>
+<li>Save your profile and switch to it</li>
+</ul>
+<p>If a game uses both the <code>Share</code> and <code>TP</code> buttons, you can have a profile with <code>Share</code> as it is and the <code>PS</code> button remapped to the <code>TP</code>. Or, if you want more advanced solutions, you can use <code>special actions</code> in the profile settings so you can switch between different profiles by button combinations mid-game.</p>
+<h3 id="i-cant-control-steams-big-picture-when-using-a-emulated-ds4-steam-doesnt-detect-my-controller-when-its-emulated-as-a-ds4-only-when-emulated-as-a-xbox-360"><em>I can't control Steam's Big Picture when using a emulated DS4 / Steam doesn't detect my controller when it's emulated as a DS4, only when emulated as a Xbox 360</em></h3>
+<p>Steam (and some really specific games, super rare case) will fully ignore DS4 controllers if it detects that DS4Windows is running. This happens so users don't accidentally have both DS4Windows and Steam remapping the controller. <strong>Regardless if Steam is detecting or not the emulated DS4, 99.9% of the games that support DS4 controllers should detect the emulated one as normal</strong>.</p>
+<p>For Steam to stop ignoring the emulated DS4 controller you need run DS4Windows under a custom <code>.exe</code> name:</p>
+<ul>
+<li>Open DS4Windows</li>
+<li>Go into the <code>Settings</code> Tab</li>
+<li>Write the name you want on the <code>Custom exe name</code> box (In the image below the name "DS4Win" is used as an example)</li>
+<li>After the name is set, fully close then re-open DS4Windows and then Steam should detect it as normal<br />
+<img alt="FAQ_DS4WCustomName" class="glightbox" src="../images/FAQ_DS4WCustomName.png" /></li>
+</ul>
+<p>It's also recommended going into the Steam's settings -&gt; Controller -&gt; General Controller Configurations -&gt; Leave <code>Playstation Configuration Supported</code> UNCHECKED, so Steam doesn't remap your controller again when you don't want it to.  </p>
+<h3 id="x-game-does-not-detect-my-emulated-ds4-my-game-is-not-showing-ps-button-icons"><em>'X' game does not detect my emulated DS4 / my game is not showing PS button icons</em></h3>
+<ul>
+<li>First, double check if the game actually supports DS4 controllers <em>and</em> has native PS icons when played with a DualShock 4. There is no direct way to check this besides just testing, Googling around and looking at forums</li>
+<li>If the game does not support DualShock 4/PS icons then that's in no way related to us and we can't do anything about it</li>
+<li>If you are 100% sure the game supports PS button icons/DualShock 4, then it may be detecting that DS4Windows is running and then ignoring DS4 controllers (super rare case, only 1 game is known to do it). Check the <a href="#i-cant-control-steams-big-picture-when-using-a-emulated-ds4-steam-doesnt-detect-my-controller-when-its-emulated-as-a-ds4-only-when-emulated-as-a-xbox-360">topic above</a> on how to solve this</li>
+<li>If the game still doesn't recognize the emulated DualShock 4 then we have no idea what's going on and you are welcome on <a href="https://vigem.org/Community-Support/">reaching us through the proper means</a></li>
+</ul>
+<h3 id="how-do-i-do-x-thing-on-ds4windows"><em>How do I do 'X' thing on DS4Windows</em></h3>
+<p>DS4Windows is a really amazing tool that can do lots of things, but the purpose of this guide isn't covering DS4Windows in itself, it's to give users the minimum necessary to have XInput/DS4 emulation and to cover DsHidMini related functions, like Light Bar color to LEDs translation. Because the other things it can do are not related to DsHidMini then it's recommended that you look in <a href="https://github.com/Ryochan7/DS4Windows/wiki/Settings">its wiki</a> or google around for online tutorials. </p>
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+        
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <nav class="md-footer__inner md-grid" aria-label="Footer">
+      
+        
+        <a href="../" class="md-footer__link md-footer__link--prev" aria-label="Previous: About DsHidMini" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              About DsHidMini
+            </div>
+          </div>
+        </a>
+      
+      
+        
+        <a href="../FAQ/" class="md-footer__link md-footer__link--next" aria-label="Next: Frequently Asked Questions" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              Frequently Asked Questions
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
+          </div>
+        </a>
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+          <div class="md-footer-copyright__highlight">
+            Copyright &copy; 2020 - 2021 <a href="https://github.com/nefarius" target="_blank" rel="noopener">Benjamin Höglinger-Stelzer</a>
+
+          </div>
+        
+        Made with
+        <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+          Material for MkDocs
+        </a>
+        
+      </div>
+      
+  <div class="md-footer-social">
+    
+      
+      
+        
+        
+      
+      <a href="https://github.com/ViGEm" target="_blank" rel="noopener" title="github.com" class="md-footer-social__link">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+      </a>
+    
+      
+      
+        
+        
+      
+      <a href="https://discord.vigem.org" target="_blank" rel="noopener" title="discord.vigem.org" class="md-footer-social__link">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M297.216 243.2c0 15.616-11.52 28.416-26.112 28.416-14.336 0-26.112-12.8-26.112-28.416s11.52-28.416 26.112-28.416c14.592 0 26.112 12.8 26.112 28.416zm-119.552-28.416c-14.592 0-26.112 12.8-26.112 28.416s11.776 28.416 26.112 28.416c14.592 0 26.112-12.8 26.112-28.416.256-15.616-11.52-28.416-26.112-28.416zM448 52.736V512c-64.494-56.994-43.868-38.128-118.784-107.776l13.568 47.36H52.48C23.552 451.584 0 428.032 0 398.848V52.736C0 23.552 23.552 0 52.48 0h343.04C424.448 0 448 23.552 448 52.736zm-72.96 242.688c0-82.432-36.864-149.248-36.864-149.248-36.864-27.648-71.936-26.88-71.936-26.88l-3.584 4.096c43.52 13.312 63.744 32.512 63.744 32.512-60.811-33.329-132.244-33.335-191.232-7.424-9.472 4.352-15.104 7.424-15.104 7.424s21.248-20.224 67.328-33.536l-2.56-3.072s-35.072-.768-71.936 26.88c0 0-36.864 66.816-36.864 149.248 0 0 21.504 37.12 78.08 38.912 0 0 9.472-11.52 17.152-21.248-32.512-9.728-44.8-30.208-44.8-30.208 3.766 2.636 9.976 6.053 10.496 6.4 43.21 24.198 104.588 32.126 159.744 8.96 8.96-3.328 18.944-8.192 29.44-15.104 0 0-12.8 20.992-46.336 30.464 7.68 9.728 16.896 20.736 16.896 20.736 56.576-1.792 78.336-38.912 78.336-38.912z"/></svg>
+      </a>
+    
+  </div>
+
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    <script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.tabs"], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../../../assets/javascripts/workers/search.477d984a.min.js", "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.82b56eb2.min.js"></script>
+      
+        <script src="../../../javascripts/glightbox.js"></script>
+      
+        <script src="../../../javascripts/main.js"></script>
+      
+    
+  </body>
+</html>
